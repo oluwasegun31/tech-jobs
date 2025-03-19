@@ -21,8 +21,8 @@ A simple job listings application built with Next.js, TypeScript, and Tailwind C
 1. Clone the repository or unzip the project files
 
 ```bash
-git clone https://github.com/oluwasegun31/tech-job.git
-cd tech-job
+git clone https://github.com/oluwasegun31/tech-jobs.git
+cd tech-jobs
 ```
 
 2. Install dependencies
