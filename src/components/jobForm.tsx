@@ -1,6 +1,7 @@
 "use client"
 import { FormEvent, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import {Job, jobs} from "@/data/jobs"
 
 export default function JobForm() {
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function JobForm() {
     location: '',
     salary: ''
   });
+  const [isSuccess, setIsSuccess] = useState<boolean>(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -19,13 +21,27 @@ export default function JobForm() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    // In a real app, this would save data to a database
-    alert('Job posted successfully!');
-    router.push('/');
+    const newJob: Job = {
+      id: (jobs.length + 1).toString(),
+      title: formData.title,
+      company: formData.company,
+      description: formData.description,
+      location: formData.location,
+      salary: formData.salary,
+      postedDate: new Date().toISOString().split('T')[0]
+    };
+    // Push the new job to the jobs array
+    jobs.push(newJob);
+    setIsSuccess(true)
+    // A timer to remove the success message and navigate back to home page
+    setTimeout(()=> {
+      setIsSuccess(false)
+      router.push('/');
+    }, 2000)
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full max-w-2xl flex flex-col justify-start items-start gap-4 mx-auto">
+    <form onSubmit={handleSubmit} className="w-full max-w-2xl flex flex-col justify-start items-start gap-2 mx-auto">
       <div className='w-full flex flex-col justify-start items-start gap-2'>
         <label htmlFor="title" className="text-base font-semibold">Job Title</label>
         <input
@@ -92,11 +108,11 @@ export default function JobForm() {
           className="w-full p-2 border border-gray-300 rounded outline-none"
         />
       </div>
-      
+      {isSuccess && <p className='text-green-500 font-medium text-base'>Posted successfully</p>}
       <div className="pt-4">
         <button
           type="submit"
-          className="w-full py-2 px-4 bg-blue-500 text-white font-medium rounded hover:bg-blue-600"
+          className="w-full py-2 px-4 bg-blue-500 text-white font-medium rounded hover:bg-blue-600 cursor-pointer"
         >
           Submit Job Listing
         </button>
